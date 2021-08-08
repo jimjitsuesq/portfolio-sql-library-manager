@@ -17,11 +17,14 @@ block content
           td=  book.genre 
           td=  book.year
     p
-    p Page #{page} of #{pages}
+    if (pages > 0)
+        p Page #{page} of #{pages}
     p
     if (page !== 1)
       a(class='button' href=`../../books?search=${search}&page=${previousPage}`) Previous Page
-    if (page !== pages)
+    if (page !== pages && pages !==0)
       a(class='button' href=`../../books?search=${search}&page=${nextPage}`) Next Page
+    if (pages === 0)
+      p Sorry.  No books match your search.
     p
     a(class='button' href='../../books') Back

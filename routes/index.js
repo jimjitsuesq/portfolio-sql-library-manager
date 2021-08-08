@@ -6,7 +6,6 @@ const { Op } = require('sequelize');
 /**
  * Redirect root address to /books
  */
-
  router.get('/', async (req, res) => {
   res.redirect('/books')
 });
@@ -14,11 +13,6 @@ const { Op } = require('sequelize');
 /**
  * Main route handler that handles initial display of all books and all searches
  */
-
- router.get('/books', async(req, res) => {
-  let search = (req.query.search);
-  let page = parseInt(req.query.page) || 1;
-  let limit = 5;
   let offset = 0;
   let nextPage;
   let previousPage;
@@ -68,7 +62,6 @@ const { Op } = require('sequelize');
 /**
  * Custom 500 error generator for testing purposes
  */
-
  router.get('/error', (req, res, next) => {
   console.log('Custom error route called');
   const err = new Error();
@@ -80,7 +73,6 @@ const { Op } = require('sequelize');
 /**
  * Render a form to create a new book in the DB
  */
-
 router.get('/books/new', async (req, res) => {
   res.render("new-book", {title: "New Book"} )
 });
@@ -88,7 +80,6 @@ router.get('/books/new', async (req, res) => {
 /**
  * Posts a new book to the DB
  */
-
 router.post('/books/new', async (req, res) => {
   let book;
   try {
@@ -107,7 +98,6 @@ router.post('/books/new', async (req, res) => {
 /**
  * Render a form to update a book's fields
  */
-
 router.get('/books/:id', async (req, res, next) => {
   const book = await Book.findByPk(req.params.id);
   if(book) {
@@ -123,7 +113,6 @@ router.get('/books/:id', async (req, res, next) => {
 /**
  * Post the updated information about a book to the DB
  */
-
 router.post('/books/:id', async (req, res) => {
   let book;
   try {
@@ -148,7 +137,6 @@ router.post('/books/:id', async (req, res) => {
 /**
  * Deletes a book from the DB
  */
-
 router.post('/books/:id/delete', async (req ,res) => {
   const book = await Book.findByPk(req.params.id);
   if(book) {
