@@ -55,7 +55,7 @@ const { Op } = require('sequelize');
       offset: offset,
       limit: limit,
     })
-    res.render("index", {books, title: "Books", page, nextPage, previousPage, pages} )
+    res.render("index", {books, title: "Book Collection", page, nextPage, previousPage, pages} )
   }
 });
 
