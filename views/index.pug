@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  h1= title
+  h1(class='glow')= title
   p
   form(method='GET')
     input(type='text', name='search', id='search')
@@ -24,8 +24,8 @@ block content
   p Page #{page} of #{pages}
   p
   if (page !== 1)
-    a(class='button' href=`../../books?page=${previousPage}`) Previous Page
+    a(class='navbutton' href=`../../books?page=${previousPage}`) Previous Page
   if (page !== pages)
-    a(class='button' href=`../../books?page=${nextPage}`) Next Page
+    a(class='navbutton' href=`../../books?page=${nextPage}`) Next Page
   p
-  a(class='button' href='../../books/new') Create New Book
+  a(class='navbutton' href='../../books/new') Create Book
