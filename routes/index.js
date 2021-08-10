@@ -3,6 +3,8 @@ var router = express.Router();
 const Book = require('../models').Book;
 const { Op } = require('sequelize');
 
+router.get('/favicon.ico', (req, res) => res.status(204));
+
 /**
  * Redirect root address to /books
  */
@@ -137,15 +139,6 @@ router.post('/books/:id', async (req, res) => {
 /**
  * Deletes a book from the DB
  */
-// router.post('/books/:id/delete', async (req ,res) => {
-//   const book = await Book.findByPk(req.params.id);
-//   if(book) {
-//     await book.destroy();
-//     res.redirect("/books");
-//   } else {
-//     res.sendStatus(404);
-//   }
-// });
 
 router.post('/books/:id/delete', async (req ,res) => {
     const book = await Book.findByPk(req.params.id);
