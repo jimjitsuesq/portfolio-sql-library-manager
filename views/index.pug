@@ -5,7 +5,7 @@ block content
   p
   form(method='GET')
     input(type='text', name='search', id='search')
-    input(type='submit', value='Search Books')
+    input(type='submit', value='Search')
   p
   table
     tr 
@@ -22,10 +22,9 @@ block content
         td= book.year
   p
   p Page #{page} of #{pages}
-  p
-  if (page !== 1)
-    a(class='navbutton' href=`../../books?page=${previousPage}`) Previous Page
-  if (page !== pages)
-    a(class='navbutton' href=`../../books?page=${nextPage}`) Next Page
-  p
-  a(class='navbutton' href='../../books/new') Create Book
+    .pagenavcontainer
+      if (page !== 1)
+        a(class='navbutton' href=`../../books?page=${previousPage}`) Previous
+      if (page !== pages)
+        a(class='navbutton' href=`../../books?page=${nextPage}`) Next
+    a(class='navbutton' href='../../books/new') Create Book
