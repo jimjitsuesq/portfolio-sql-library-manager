@@ -23,9 +23,9 @@ block content
         td= book.year
   p
   p Page #{page} of #{pages}
-    .pagenavcontainer
-      if (page !== 1)
-        a(class='navbutton' href=`../../books?page=${previousPage}`) Previous
-      if (page !== pages)
-        a(class='navbutton' href=`../../books?page=${nextPage}`) Next
-    a(class='navbutton' href='../../books/new') Create Book
+  .pagenavcontainer
+    if (page !== 1)
+    a(class='navbutton' href=`../../books?page=${previousPage}`) Previous
+    if (page !== pages)
+    a(class='navbutton' href=`../../books?page=${nextPage}`) Next
+  a(class='navbutton' href='../../books/new') Create Book
