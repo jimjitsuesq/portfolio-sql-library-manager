@@ -1,96 +1,111 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-const Book = require('../models').Book;
-const { Op } = require('sequelize');
+const Book = require("../models").Book;
+const { Op } = require("sequelize");
 
-router.get('/favicon.ico', (req, res) => res.status(204));
+router.get("/favicon.ico", (req, res) => res.status(204));
 
 /**
  * Redirect root address to /books
  */
- router.get('/', async (req, res) => {
-  res.redirect('/books')
+router.get("/", async (req, res) => {
+  res.redirect("/books");
 });
 
 /**
  * Main route handler that handles initial display of all books and all searches
  */
-  let offset = 0;
-  let nextPage;
-  let previousPage;
-  let pages;
-  if (search !== undefined) {
-    const searchBooks = await Book.findAndCountAll({
-      where: {
-        [Op.or]: [
-          {title: {[Op.substring]: search}},
-          {author: {[Op.substring]: search}},
-          {genre: {[Op.substring]: search}},
-          {year: {[Op.eq]: search}}
-        ]
-      }
-    });
-    pages = Math.ceil(searchBooks.count / limit);
-    offset = limit * (page - 1);
-    nextPage = page + 1;
-    previousPage = page - 1;
-    const books = await Book.findAll({
-      where: {
-        [Op.or]: [
-          {title: {[Op.substring]: search}},
-          {author: {[Op.substring]: search}},
-          {genre: {[Op.substring]: search}},
-          {year: {[Op.eq]: search}}
-        ]
-      },
-      offset: offset,
-      limit: limit,
-    })
-    res.render("search-results", {books, search, page, nextPage, previousPage, pages} )
-  } else {  
-    const allBooks = await Book.findAndCountAll({offset, limit})
-    pages = Math.ceil(allBooks.count / limit);
-    offset = limit * (page - 1);
-    nextPage = page + 1;
-    previousPage = page - 1;
-    const books = await Book.findAll({
-      offset: offset,
-      limit: limit,
-    })
-    res.render("index", {books, title: "Book Collection", page, nextPage, previousPage, pages} )
-  }
-});
+let offset = 0;
+let nextPage;
+let previousPage;
+let pages;
+if (search !== undefined) {
+  const searchBooks = await Book.findAndCountAll({
+    where: {
+      [Op.or]: [
+        { title: { [Op.substring]: search } },
+        { author: { [Op.substring]: search } },
+        { genre: { [Op.substring]: search } },
+        { year: { [Op.eq]: search } },
+      ],
+    },
+  });
+  pages = Math.ceil(searchBooks.count / limit);
+  offset = limit * (page - 1);
+  nextPage = page + 1;
+  previousPage = page - 1;
+  const books = await Book.findAll({
+    where: {
+      [Op.or]: [
+        { title: { [Op.substring]: search } },
+        { author: { [Op.substring]: search } },
+        { genre: { [Op.substring]: search } },
+        { year: { [Op.eq]: search } },
+      ],
+    },
+    offset: offset,
+    limit: limit,
+  });
+  res.render("search-results", {
+    books,
+    search,
+    page,
+    nextPage,
+    previousPage,
+    pages,
+  });
+} else {
+  const allBooks = await Book.findAndCountAll({ offset, limit });
+  pages = Math.ceil(allBooks.count / limit);
+  offset = limit * (page - 1);
+  nextPage = page + 1;
+  previousPage = page - 1;
+  const books = await Book.findAll({
+    offset: offset,
+    limit: limit,
+  });
+  res.render("index", {
+    books,
+    title: "Book Collection",
+    page,
+    nextPage,
+    previousPage,
+    pages,
+  });
+}
 
 /**
  * Custom 500 error generator for testing purposes
  */
- router.get('/error', (req, res, next) => {
-  console.log('Custom error route called');
+router.get("/error", (req, res, next) => {
+  console.log("Custom error route called");
   const err = new Error();
   err.status = 500;
-  err.message = `Custom 500 error thrown`
-  next(err)
+  err.message = `Custom 500 error thrown`;
+  next(err);
 });
 
 /**
  * Render a form to create a new book in the DB
  */
-router.get('/books/new', async (req, res) => {
-  res.render("new-book", {title: "New Book"} )
+router.get("/books/new", async (req, res) => {
+  res.render("new-book", { title: "New Book" });
 });
 
 /**
  * Posts a new book to the DB
  */
-router.post('/books/new', async (req, res) => {
+router.post("/books/new", async (req, res) => {
   let book;
   try {
     book = await Book.create(req.body);
     res.redirect("../books");
   } catch (error) {
-    if(error.name === "SequelizeValidationError") {
+    if (error.name === "SequelizeValidationError") {
       book = await Book.build(req.body);
-      res.status(400).render("new-book", {book, errors: error.errors, title: "New Book"})
+      res
+        .status(400)
+        .render("new-book", { book, errors: error.errors, title: "New Book" });
     } else {
       throw error;
     }
@@ -100,14 +115,14 @@ router.post('/books/new', async (req, res) => {
 /**
  * Render a form to update a book's fields
  */
-router.get('/books/:id', async (req, res, next) => {
+router.get("/books/:id", async (req, res, next) => {
   const book = await Book.findByPk(req.params.id);
-  if(book) {
-    res.render("update-book", {book, title: "Update Book"} )
+  if (book) {
+    res.render("update-book", { book, title: "Update Book" });
   } else {
     const err = new Error();
     err.status = 404;
-    err.message = "Looks like the book you reqested doesn't exist."
+    err.message = "Looks like the book you reqested doesn't exist.";
     next(err);
   }
 });
@@ -115,21 +130,27 @@ router.get('/books/:id', async (req, res, next) => {
 /**
  * Post the updated information about a book to the DB
  */
-router.post('/books/:id', async (req, res) => {
+router.post("/books/:id", async (req, res) => {
   let book;
   try {
     book = await Book.findByPk(req.params.id);
-    if(book) {
+    if (book) {
       await book.update(req.body);
-      res.redirect("../books"); 
+      res.redirect("../books");
     } else {
       res.sendStatus(404);
     }
   } catch (error) {
-    if(error.name === "SequelizeValidationError") {
+    if (error.name === "SequelizeValidationError") {
       book = await Book.build(req.body);
       book.id = req.params.id;
-      res.status(400).render("update-book", { book, errors: error.errors, title: "Update Book" })
+      res
+        .status(400)
+        .render("update-book", {
+          book,
+          errors: error.errors,
+          title: "Update Book",
+        });
     } else {
       throw error;
     }
@@ -140,14 +161,14 @@ router.post('/books/:id', async (req, res) => {
  * Deletes a book from the DB
  */
 
-router.post('/books/:id/delete', async (req ,res) => {
-    const book = await Book.findByPk(req.params.id);
-    if(book) {
-      await book.destroy();
-      res.redirect("/books");
-    } else {
-      res.sendStatus(404);
-    }
-  });
+router.post("/books/:id/delete", async (req, res) => {
+  const book = await Book.findByPk(req.params.id);
+  if (book) {
+    await book.destroy();
+    res.redirect("/books");
+  } else {
+    res.sendStatus(404);
+  }
+});
 
 module.exports = router;

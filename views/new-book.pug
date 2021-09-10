@@ -1,26 +1,26 @@
 extends layout 
 
 block content 
-    if(errors)
-        h2.errors.error Oops! An error occurred!
-        ul.errors.error
-            each error in errors
-                li= error.message
-    h1= title 
-    form(method='POST')
-        p 
-        label(for='title') Title: 
-        input(type='text', name='title', id='title')
-        p
-        label(for='author') Author: 
-        input(type='text', name='author', id='author')
-        p
-        label(for='genre') Genre: 
-        input(type='text', name='genre', id='genre')
-        p
-        label(for='year') Year: 
-        input(type='text', name='year', id='year')
-        p
-        .pagenavcontainer
-          input(type='submit' value='Submit')
-          a(class='navbutton' href='../books') Cancel
+  if(errors)
+    h2.errors.error Oops! An error occurred!
+    ul.errors.error
+      each error in errors
+        li= error.message
+  h1= title 
+  form(method='POST')
+    p 
+    label(for='title') Title: 
+    input(type='text', name='title', id='title')
+    p
+    label(for='author') Author: 
+    input(type='text', name='author', id='author')
+    p
+    label(for='genre') Genre: 
+    input(type='text', name='genre', id='genre')
+    p
+    label(for='year') Year: 
+    input(type='text', name='year', id='year')
+    p
+    .pagenavcontainer
+      input(type='submit' value='Submit')
+      a(class='navbutton' href='../books') Cancel
